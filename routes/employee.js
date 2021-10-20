@@ -14,9 +14,23 @@ employee.post("/", async (req, res, next) => {
     const result = await db.query(query);
 
     if (result.affectedRows === 1) {
-      return res
-        .status(201)
-        .json({ code: 201, message: "Empleado insertado correctamente" });
+      const employee_id = result.insertId;
+
+      let query = `
+        SELECT * FROM employees 
+        WHERE id = ${employee_id}
+        LIMIT 1
+      `;
+
+      const employeeFound = await db.query(query);
+
+      if (employeeFound.length > 0) {
+        return res.status(201).json({
+          code: 201,
+          message: "Empleado insertado correctamente",
+          employee: employeeFound[0],
+        });
+      }
     }
 
     return res.status(500).json({ code: 500, message: "Ocurrió un error" });
@@ -45,16 +59,17 @@ employee.delete("/:id([0-9]{1,3})", async (req, res, next) => {
 
 employee.put("/:id([0-9]{1,3})", async (req, res, next) => {
   const id = req.params.id;
-  const { name, last_name, phone_number, email } = req.body;
+  const { name, last_name, phone_number, email, address } = req.body;
 
-  if (name && last_name && phone_number && email) {
+  if (name && last_name && phone_number && email && address) {
     const query = `
-      UPDATE employee
+      UPDATE employees
       SET name = '${name}', 
-        last_name = ${last_name}, 
-        phone_number = ${phone_number}, 
-        email = ${email}
-      WHERE pok_id = ${id}
+        last_name = '${last_name}', 
+        phone_number = '${phone_number}', 
+        email = '${email}',
+        address = '${address}'
+      WHERE id = ${id}
     `;
 
     const result = await db.query(query);
@@ -79,17 +94,17 @@ employee.get("/", async (req, res, next) => {
   });
 });
 
-employee.get("/:id([0-9]{1,3})", async (req, res, next) => {
+employee.get("/:id([0-9]{1,11})", async (req, res, next) => {
   const id = req.params.id;
 
-  const employees = await db.query(
+  const employeeFound = await db.query(
     `SELECT * FROM employees WHERE id = ${id} LIMIT 1`
   );
 
-  if (employees.length > 0) {
+  if (employeeFound.length > 0) {
     return res.status(200).json({
       code: 200,
-      message: employees,
+      message: employeeFound[0],
     });
   }
 

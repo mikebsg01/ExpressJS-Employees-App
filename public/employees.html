@@ -57,6 +57,9 @@
           <div class="card bg-light">
             <div class="card-header">Crear nuevo empleado</div>
             <div class="card-body">
+              <div>
+                <input type="hidden" id="input-id" value="" />
+              </div>
               <div class="form-group">
                 <label for="input-name">Nombre(s)</label>
                 <input
@@ -106,7 +109,13 @@
                 ></textarea>
               </div>
               <div class="d-flex justify-content-between">
-                <button id="btn-submit" class="btn btn-primary">Agregar</button>
+                <button id="btn-submit" class="btn btn-success">Agregar</button>
+                <button id="btn-edit" class="btn btn-primary invisible d-none">
+                  Actualizar
+                </button>
+                <button id="btn-cancel" class="btn btn-dark invisible d-none">
+                  Cancelar
+                </button>
               </div>
             </div>
           </div>
