@@ -60,6 +60,8 @@ const displayEmployeeList = () => {
   for (let i = 0; i < employeeList.length; ++i) {
     displayEmployee(employeeList[i]);
   }
+
+  updateEmployeeCount();
 };
 
 const updateEmployeeCount = () => {
