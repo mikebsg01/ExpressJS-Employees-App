@@ -7,19 +7,19 @@ const init = () => {
 };
 
 const login = async () => {
-  const user_mail = document.getElementById("input-mail").value;
-  const user_password = document.getElementById("input-password").value;
+  const email = document.getElementById("input-mail").value;
+  const password = document.getElementById("input-password").value;
 
-  console.log({ user_mail, user_password });
+  console.log({ email, password });
 
   try {
     const { data } = await axios.post("http://localhost:8035/user/login", {
-      user_mail,
-      user_password,
+      email,
+      password,
     });
 
     localStorage.setItem(sessionTokenName, data.message);
-    window.location.href = "pokedex.html";
+    window.location.href = "employees.html";
     console.log(data);
   } catch (error) {
     const {

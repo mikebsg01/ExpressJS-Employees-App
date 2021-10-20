@@ -4,13 +4,13 @@ const user = express.Router();
 const db = require("../config/database");
 
 user.post("/login", async (req, res, next) => {
-  const { user_mail, user_password } = req.body;
+  const { email, password } = req.body;
 
-  if (user_mail && user_password) {
+  if (email && password) {
     const query = `
-      SELECT * FROM user 
-      WHERE user_mail = '${user_mail}' AND
-            user_password = '${user_password}'
+      SELECT * FROM users 
+      WHERE email = '${email}' AND
+            password = '${password}'
     `;
     let result = await db.query(query);
 
@@ -19,8 +19,8 @@ user.post("/login", async (req, res, next) => {
 
       const token = jwt.sign(
         {
-          user_id: result.user_id,
-          user_mail: result.user_mail,
+          user_id: result.id,
+          user_email: result.email,
         },
         "debugkey"
       );
