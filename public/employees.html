@@ -18,19 +18,37 @@
   </head>
   <body>
     <div class="container">
-      <div class="row mt-5 mb-4">
+      <div class="row mt-4 mb-4">
         <div class="col-12">
           <h1>Listado de empleados</h1>
-          <h5 class="form-text text-muted">
-            <span id="employee-count" class="badge badge-pill badge-primary"
-              >0</span
-            >
-            encontrados.
-          </h5>
         </div>
       </div>
       <div class="row">
         <div class="col-7">
+          <div class="form-group row mb-3">
+            <div class="col-7">
+              <input
+                type="text"
+                class="form-control"
+                id="input-search"
+                placeholder="E.j. Juanito"
+                required
+              />
+            </div>
+            <div class="pl-0 col-3">
+              <button id="btn-search" class="btn btn-primary">Buscar</button>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-12">
+              <h5 class="form-text text-muted">
+                <span id="employee-count" class="badge badge-pill badge-primary"
+                  >0</span
+                >
+                encontrados.
+              </h5>
+            </div>
+          </div>
           <div class="row mb-3">
             <div id="employee-list" class="col-12"></div>
           </div>

@@ -99,22 +99,24 @@ employee.get("/:id([0-9]{1,3})", async (req, res, next) => {
   });
 });
 
-employee.get("/:name([A-Za-z]+)", async (req, res, next) => {
-  const name = req.params.name;
+employee.get("/search", async (req, res, next) => {
+  const { query } = req.query;
   const employeeFound = await db.query(
-    `SELECT * FROM employees WHERE name LIKE "${name}" LIMIT 1`
+    `SELECT * FROM employees 
+    WHERE name LIKE "%${query}%" OR
+          last_name LIKE "%${query}%"`
   );
 
   if (employeeFound.length > 0) {
     return res.status(200).json({
       code: 200,
-      message: employeeFound[0],
+      message: employeeFound,
     });
   }
 
   return res.status(404).json({
     code: 404,
-    message: "Empleado no encontrado :(",
+    message: "Empleado(s) no encontrado(s) :(",
   });
 });
 

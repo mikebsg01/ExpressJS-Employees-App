@@ -1,11 +1,16 @@
 const employeeList = [];
 
-const getEmployees = async () => {
+const getEmployees = async (query) => {
   try {
-    const {
-      data: { message },
-    } = await axios.get(url("/employees"));
-    return message;
+    let result;
+    if (query) {
+      result = await axios.get(url(`/employees/search?query=${query}`), {
+        query,
+      });
+    } else {
+      result = await axios.get(url("/employees"));
+    }
+    return result.data.message;
   } catch (error) {
     const {
       response: { data },
@@ -45,8 +50,8 @@ const updateEmployeeCount = () => {
   employeeCountElement.text(`${employeeList.length}`);
 };
 
-const loadEmployees = async () => {
-  const employees = await getEmployees();
+const loadEmployees = async (query) => {
+  const employees = query ? await getEmployees(query) : await getEmployees();
   employeeList.push(...employees);
   console.log({ employeeList });
   displayEmployeeList();
@@ -136,11 +141,23 @@ const removeEmployeeEvent = async function () {
   }
 };
 
+const clearEmployeeList = () => {
+  employeeList.splice(0, employeeList.length);
+  $("#employee-list").empty();
+};
+
+const searchEmployeeEvent = async function () {
+  const query = $("#input-search").val();
+  clearEmployeeList();
+  loadEmployees(query);
+};
+
 $(document).ready(async function () {
   if (!checkIfUserIsLoggedIn()) {
     window.location.href = "index.html";
   }
 
+  $("#btn-search").on("click", searchEmployeeEvent);
   $("#btn-submit").on("click", createEmployeeEvent);
   $("#employee-list").on("click", ".delete-employee", removeEmployeeEvent);
 
