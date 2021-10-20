@@ -3,12 +3,12 @@ const employee = express.Router();
 const db = require("../config/database");
 
 employee.post("/", async (req, res, next) => {
-  const { pok_name, pok_height, pok_weight, pok_base_experience } = req.body;
+  const { name, last_name, phone_number, email, address } = req.body;
 
-  if (pok_name && pok_height && pok_weight && pok_base_experience) {
+  if (name && last_name && phone_number && email && address) {
     let query = `
-      INSERT INTO employee(pok_name, pok_height, pok_weight, pok_base_experience)
-      VALUES('${pok_name}', ${pok_height}, ${pok_weight}, ${pok_base_experience});
+      INSERT INTO employees (name, last_name, phone_number, email, address)
+      VALUES('${name}', '${last_name}', '${phone_number}', '${email}', '${address}');
     `;
 
     const result = await db.query(query);
@@ -45,15 +45,15 @@ employee.delete("/:id([0-9]{1,3})", async (req, res, next) => {
 
 employee.put("/:id([0-9]{1,3})", async (req, res, next) => {
   const id = req.params.id;
-  const { pok_name, pok_height, pok_weight, pok_base_experience } = req.body;
+  const { name, last_name, phone_number, email } = req.body;
 
-  if (pok_name && pok_height && pok_weight && pok_base_experience) {
+  if (name && last_name && phone_number && email) {
     const query = `
       UPDATE employee
-      SET pok_name = '${pok_name}', 
-        pok_height = ${pok_height}, 
-        pok_weight = ${pok_weight}, 
-        pok_base_experience = ${pok_base_experience}
+      SET name = '${name}', 
+        last_name = ${last_name}, 
+        phone_number = ${phone_number}, 
+        email = ${email}
       WHERE pok_id = ${id}
     `;
 
@@ -73,12 +73,12 @@ employee.put("/:id([0-9]{1,3})", async (req, res, next) => {
 
 employee.patch("/:id([0-9]{1,3})", async (req, res, next) => {
   const id = req.params.id;
-  const { pok_name } = req.body;
+  const { name } = req.body;
 
-  if (pok_name) {
+  if (name) {
     const query = `
         UPDATE employee
-        SET pok_name = '${pok_name}'
+        SET name = '${name}'
         WHERE pok_id = ${id}
       `;
 
@@ -97,10 +97,10 @@ employee.patch("/:id([0-9]{1,3})", async (req, res, next) => {
 });
 
 employee.get("/", async (req, res, next) => {
-  const pk = await db.query("SELECT * FROM employee");
+  const employees = await db.query("SELECT * FROM employees");
   return res.status(200).json({
     code: 200,
-    message: pk,
+    message: employees,
   });
 });
 
@@ -126,7 +126,7 @@ employee.get("/:id([0-9]{1,3})", async (req, res, next) => {
 employee.get("/:name([A-Za-z]+)", async (req, res, next) => {
   const name = req.params.name;
   const employeeFound = await db.query(
-    `SELECT * FROM employee WHERE pok_name LIKE "${name}" LIMIT 1`
+    `SELECT * FROM employee WHERE name LIKE "${name}" LIMIT 1`
   );
 
   if (employeeFound.length > 0) {

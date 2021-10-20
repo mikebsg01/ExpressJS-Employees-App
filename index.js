@@ -28,7 +28,7 @@ app.use("/user", user);
 
 app.use(auth);
 
-app.use("/employee", employee);
+app.use("/employees", employee);
 
 app.use(notFound);
 

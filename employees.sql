@@ -6,7 +6,7 @@ CREATE TABLE employees (
   id int(11) NOT NULL AUTO_INCREMENT,
   name VARCHAR(25) NOT NULL,
   last_name VARCHAR(25),
-  phone_number VARCHAR(10),
+  phone_number VARCHAR(25),
   email VARCHAR(80) NOT NULL,
   address VARCHAR(120),
   PRIMARY KEY (id)
