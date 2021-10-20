@@ -1,3 +1,5 @@
+const employeeList = [];
+
 const getEmployees = async () => {
   try {
     const {
@@ -13,26 +15,45 @@ const getEmployees = async () => {
   }
 };
 
-const displayEmployees = (employees) => {
-  const list = document.querySelector("#employee-list");
+const displayEmployee = (employee) => {
+  const listElement = document.querySelector("#employee-list");
 
-  for (let i = 0; i < employees.length; ++i) {
-    list.innerHTML +=
-      `<div class="card mb-3">` +
-      `\t<div class="card-body">` +
-      `\t\t<h3>${employees[i].name} ${employees[i].last_name}</h3>` +
-      `\t\t<a href="mailto:${employees[i].email}">${employees[i].email}</a>` +
-      `\t\t<p>${employees[i].phone_number}</p>` +
-      `\t\t<p>${employees[i].address}</p>` +
-      `\t</div>` +
-      `</div>`;
+  listElement.innerHTML +=
+    `<div class="card mb-3">` +
+    `\t<div class="card-body">` +
+    `\t\t<h3>${employee.name} ${employee.last_name}</h3>` +
+    `\t\t<a href="mailto:${employee.email}">${employee.email}</a>` +
+    `\t\t<p>${employee.phone_number}</p>` +
+    `\t\t<p>${employee.address}</p>` +
+    `\t</div>` +
+    `</div>`;
+};
+
+const displayEmployeeList = () => {
+  for (let i = 0; i < employeeList.length; ++i) {
+    displayEmployee(employeeList[i]);
   }
+};
+
+const updateEmployeeCount = () => {
+  const employeeCountElement = document.querySelector("#employee-count");
+  employeeCountElement.innerHTML = `${employeeList.length}`;
 };
 
 const loadEmployees = async () => {
   const employees = await getEmployees();
-  console.log({ employees });
-  displayEmployees(employees);
+  employeeList.push(...employees);
+  console.log({ employeeList });
+  displayEmployeeList();
+  updateEmployeeCount();
+};
+
+const clearForm = () => {
+  document.getElementById("input-name").value = "";
+  document.getElementById("input-last-name").value = "";
+  document.getElementById("input-phone-number").value = "";
+  document.getElementById("input-email").value = "";
+  document.getElementById("input-address").value = "";
 };
 
 const signin = async () => {
@@ -61,6 +82,10 @@ const signin = async () => {
 
       console.log(data);
       alert("Empleado agregado exitosamente! :)");
+      employeeList.push(employee_data);
+      displayEmployee(employee_data);
+      updateEmployeeCount();
+      clearForm();
     } catch (error) {
       const {
         response: { data },
